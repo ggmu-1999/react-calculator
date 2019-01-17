@@ -17,11 +17,31 @@ class App extends Component {
   }
 
   addToInput = (val) => {
-    this.setState({ input: this.state.input + val });
+      this.setState({ input: this.state.input + val });
+  };
+
+  toggleSign = () => {
+    if (this.state.input !== "" ) {
+      this.setState({
+        input: parseInt(this.state.input, 10) * -1
+      });
+    }
+    else {
+      this.setState({
+        input: ""
+      })
+    }
   };
 
   handleEqual = () => {
-    this.setState({ input: math.eval(this.state.input) });
+    try {
+      this.setState({ input: math.eval(this.state.input) });
+    }
+    catch (e) {
+      this.setState ({
+        input: ""
+      })
+    }
   };
 
   render() {
@@ -33,9 +53,9 @@ class App extends Component {
             <ClearButton handleClear={() => this.setState({ input: "" })}>
               AC
             </ClearButton>
-            <NegativeButton handleClick={this.addToInput}>+/-</NegativeButton>
+            <NegativeButton handleClick={this.toggleSign}>+/-</NegativeButton>
             <Button handleClick={this.addToInput}>%</Button>
-            <Button handleClick={this.addToInput}>/</Button>
+            <Button handleClick={this.addToInput}>÷</Button>
           </div>
           <div className="row">
             <Button handleClick={this.addToInput}>7</Button>
