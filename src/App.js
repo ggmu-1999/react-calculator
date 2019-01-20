@@ -5,6 +5,7 @@ import { Input } from "./components/Input";
 import { ClearButton } from "./components/ClearButton";
 import { ButtonZero } from "./components/ButtonZero";
 import { NegativeButton } from "./components/NegativeButton";
+import { DivideButton } from "./components/DivideButton";
 import * as math from "mathjs";
 
 class App extends Component {
@@ -12,18 +13,26 @@ class App extends Component {
     super(props);
 
     this.state = {
-      input: ""
+      input: "",
+      calculate: "",
     };
   }
 
   addToInput = (val) => {
+    this.setState({ calculate: this.state.calculate + val });
+    if (!isNaN(val) || val === ".") {
       this.setState({ input: this.state.input + val });
+    }
+    else {
+      this.setState({ input: "" });
+    }
   };
 
   toggleSign = () => {
-    if (this.state.input !== "" ) {
+    if (this.state.input !== "") {
       this.setState({
-        input: parseInt(this.state.input, 10) * -1
+        input: parseFloat(this.state.input) * -1,
+        calculate: parseFloat(this.state.calculate) * -1
       });
     }
     else {
@@ -35,11 +44,11 @@ class App extends Component {
 
   handleEqual = () => {
     try {
-      this.setState({ input: math.eval(this.state.input) });
+      this.setState({ input: math.eval(this.state.calculate) });
     }
     catch (e) {
-      this.setState ({
-        input: ""
+      this.setState({
+        input: "Please enter a valid arithmetic expression"
       })
     }
   };
@@ -50,12 +59,12 @@ class App extends Component {
         <div className="calc-wrapper">
           <Input input={this.state.input} />
           <div className="row">
-            <ClearButton handleClear={() => this.setState({ input: "" })}>
+            <ClearButton handleClear={() => this.setState({ input: "", calculate: "" })}>
               AC
             </ClearButton>
             <NegativeButton handleClick={this.toggleSign}>+/-</NegativeButton>
             <Button handleClick={this.addToInput}>%</Button>
-            <Button handleClick={this.addToInput}>÷</Button>
+            <DivideButton handleClick={this.addToInput}>÷</DivideButton>
           </div>
           <div className="row">
             <Button handleClick={this.addToInput}>7</Button>
